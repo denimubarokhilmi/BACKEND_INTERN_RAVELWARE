@@ -67,20 +67,24 @@ npm run pub
 ## 📁 Struktur Project
 
 ```
-├── app.js                  # Entry point Express server
+├── app.js                              # Entry point Express server
+├── index.html                          # Dokumentasi lengkap (buka di browser)
 ├── router/
-│   └── router.js           # Definisi route API
-├── controllers/
-│   └── controller.js       # Validasi input & handler request
+│   └── router.js                       # Definisi route API
+├── controller/
+│   ├── controller.js                   # Re-export semua controller
+│   └── energy_controller/
+│       └── energy.js                   # Validasi input & handler request
 ├── service/
-│   └── service.js          # Business logic (kalkulasi energy & cost)
+│   ├── service.js                      # Re-export semua service
+│   └── energy_service/
+│       └── energy.js                   # Business logic (kalkulasi energy & cost)
 ├── database/
-│   └── influx.js           # Koneksi InfluxDB
-├── pub.js                  # MQTT Subscriber → tulis ke InfluxDB
-├── sensor.js               # MQTT Publisher → simulasi sensor
-├── docs/
-│   └── index.html          # Dokumentasi lengkap (buka di browser)
-├── .env                    # Konfigurasi environment (buat manual)
+│   └── influx.js                       # Koneksi InfluxDB
+├── simulate.subs.js                    # MQTT Subscriber → tulis ke InfluxDB
+├── simulate.sensor.js                  # MQTT Publisher → simulasi sensor
+├── .env                                # Konfigurasi environment (buat manual)
+├── helper.js                           # bantuan fungsi
 └── package.json
 ```
 
@@ -98,10 +102,9 @@ Dokumentasi lengkap tersedia di file `docs/index.html`, mencakup:
 **Cara membuka:**
 ```bash
 # Cukup buka file di browser
-open docs/index.html
+open index.html
+(jika ingin lebih simple, download extension Live Server di vscode, setelah terinstall klik kanan pada file tersebut lalu nanti akan terbuka di browser di tab baru)
 
-# atau di Windows
-start docs/index.html
 ```
 > Tidak perlu server tambahan, langsung buka file-nya saja.
 
@@ -159,10 +162,3 @@ curl http://localhost:3000/api/dashboard/panel/PANEL_LANTAI_1?month=feb&year=202
 - **`npm run pub`** (simulasi sensor) dan **`npm run sub`** (subscriber) harus berjalan **bersamaan** agar data mengalir ke InfluxDB
 
 ---
-
-## 📬 Kontak
-
-**PT Ravelware Technology Indonesia**
-- Bekasi Town Square Blok J-01, Jl. Cut Meutia Raya, Bekasi
-- Telp: 021-82699297
-- Email: contact@ravelware.co
