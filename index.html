@@ -1,0 +1,2136 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Energy Monitoring API — Docs</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <style>
+      :root {
+        --bg: #0a0e17;
+        --surface: #111827;
+        --surface2: #1a2235;
+        --border: #1e2d45;
+        --accent: #00d4ff;
+        --accent2: #00ff99;
+        --accent3: #ff6b35;
+        --text: #e2e8f0;
+        --text-muted: #64748b;
+        --font-mono: "IBM Plex Mono", monospace;
+        --font-sans: "IBM Plex Sans", sans-serif;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-sans);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      /* === GRID BACKGROUND === */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        background-image:
+          linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+      }
+
+      /* === HEADER === */
+      header {
+        position: relative;
+        z-index: 10;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(
+          180deg,
+          rgba(0, 212, 255, 0.05) 0%,
+          transparent 100%
+        );
+        padding: 0 2rem;
+      }
+      .header-inner {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 0;
+      }
+      .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .logo-badge {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--accent), #0066ff);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        font-weight: 600;
+        font-size: 0.75rem;
+        color: #fff;
+        letter-spacing: 1px;
+      }
+      .logo-text h1 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .logo-text span {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+      }
+      .version-badge {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        background: rgba(0, 212, 255, 0.1);
+        color: var(--accent);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        padding: 0.3rem 0.8rem;
+        border-radius: 99px;
+      }
+
+      /* === NAV === */
+      nav {
+        position: relative;
+        z-index: 10;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 0 2rem;
+        position: sticky;
+        top: 0;
+      }
+      nav ul {
+        max-width: 1400px;
+        margin: 0 auto;
+        list-style: none;
+        display: flex;
+        gap: 0.25rem;
+      }
+      nav a {
+        display: block;
+        padding: 1rem 1.25rem;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+      }
+      nav a:hover,
+      nav a.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+
+      /* === MAIN LAYOUT === */
+      main {
+        position: relative;
+        z-index: 1;
+      }
+      .section {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+      }
+      .section-number {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        border-radius: 4px;
+        padding: 0.25rem 0.6rem;
+      }
+      .section-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+      }
+      .section-subtitle {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-top: 0.5rem;
+      }
+
+      /* === OVERVIEW CARDS === */
+      .overview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+      }
+      .overview-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .overview-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent), transparent);
+      }
+      .overview-card .label {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-family: var(--font-mono);
+      }
+      .overview-card .value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 0.5rem;
+      }
+      .overview-card .sub {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-top: 0.25rem;
+      }
+
+      /* === ARCHITECTURE === */
+      .arch-container {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 2rem;
+        overflow-x: auto;
+      }
+      .arch-diagram {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        min-width: 700px;
+      }
+      .arch-layer {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        position: relative;
+        padding: 1rem 0;
+      }
+      .arch-layer::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -1px;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 2rem;
+        background: linear-gradient(180deg, var(--accent), transparent);
+      }
+      .arch-layer:last-child::after {
+        display: none;
+      }
+      .arch-node {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 0.9rem 1.5rem;
+        text-align: center;
+        min-width: 140px;
+        position: relative;
+      }
+      .arch-node.primary {
+        border-color: rgba(0, 212, 255, 0.5);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+      }
+      .arch-node.secondary {
+        border-color: rgba(0, 255, 153, 0.4);
+        box-shadow: 0 0 20px rgba(0, 255, 153, 0.08);
+      }
+      .arch-node.tertiary {
+        border-color: rgba(255, 107, 53, 0.4);
+        box-shadow: 0 0 20px rgba(255, 107, 53, 0.08);
+      }
+      .arch-node .node-icon {
+        font-size: 1.4rem;
+        margin-bottom: 0.4rem;
+      }
+      .arch-node .node-title {
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+      .arch-node .node-sub {
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        margin-top: 0.2rem;
+      }
+      .arch-label {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        color: var(--accent);
+        background: rgba(0, 212, 255, 0.08);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        padding: 0.3rem 0.8rem;
+        border-radius: 99px;
+      }
+      .arch-row-label {
+        width: 100px;
+        text-align: right;
+        padding-right: 1rem;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        flex-shrink: 0;
+      }
+      .arch-nodes-group {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex: 1;
+        justify-content: center;
+      }
+
+      /* === ERD === */
+      .erd-container {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 2rem;
+      }
+      .mermaid {
+        display: flex;
+        justify-content: center;
+        filter: invert(0);
+      }
+
+      /* === ENDPOINT DOCS === */
+      .endpoint-block {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+      }
+      .endpoint-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.02);
+        cursor: pointer;
+      }
+      .method-badge {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.3rem 0.8rem;
+        border-radius: 6px;
+        min-width: 54px;
+        text-align: center;
+      }
+      .method-get {
+        background: rgba(0, 212, 255, 0.15);
+        color: var(--accent);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+      }
+      .endpoint-path {
+        font-family: var(--font-mono);
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+      .endpoint-desc {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-left: auto;
+      }
+      .endpoint-body {
+        padding: 1.5rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+      @media (max-width: 768px) {
+        .endpoint-body {
+          grid-template-columns: 1fr;
+        }
+      }
+      .param-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.82rem;
+      }
+      .param-table th {
+        text-align: left;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        padding: 0.5rem 0.75rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .param-table td {
+        padding: 0.6rem 0.75rem;
+        border-bottom: 1px solid rgba(30, 45, 69, 0.5);
+        vertical-align: top;
+      }
+      .param-table tr:last-child td {
+        border-bottom: none;
+      }
+      .param-name {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--accent);
+      }
+      .param-type {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--accent2);
+      }
+      .param-req {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--accent3);
+      }
+      .param-opt {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--text-muted);
+      }
+      .sub-title {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        margin-bottom: 0.75rem;
+      }
+      .code-block {
+        background: #060c18;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 1.25rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        line-height: 1.7;
+        overflow-x: auto;
+        white-space: pre;
+      }
+      .json-key {
+        color: #7dd3fc;
+      }
+      .json-str {
+        color: #86efac;
+      }
+      .json-num {
+        color: #fbbf24;
+      }
+      .json-bool {
+        color: #f87171;
+      }
+      .json-null {
+        color: #94a3b8;
+      }
+      .response-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+      .resp-tab {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.35rem 0.8rem;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        background: transparent;
+        transition: all 0.15s;
+      }
+      .resp-tab.active.s200 {
+        background: rgba(0, 255, 153, 0.1);
+        color: var(--accent2);
+        border-color: rgba(0, 255, 153, 0.4);
+      }
+      .resp-tab.active.s400 {
+        background: rgba(255, 107, 53, 0.1);
+        color: var(--accent3);
+        border-color: rgba(255, 107, 53, 0.4);
+      }
+      .resp-tab.active.s404 {
+        background: rgba(255, 200, 0, 0.1);
+        color: #fbbf24;
+        border-color: rgba(255, 200, 0, 0.4);
+      }
+      .resp-tab.active.s500 {
+        background: rgba(248, 113, 113, 0.1);
+        color: #f87171;
+        border-color: rgba(248, 113, 113, 0.4);
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+
+      /* === SWAGGER OVERRIDE === */
+      #swagger-ui {
+        background: transparent;
+        font-family: var(--font-sans) !important;
+      }
+      .swagger-ui {
+        background: transparent !important;
+      }
+      .swagger-ui .info {
+        background: var(--surface);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid var(--border);
+      }
+      .swagger-ui .info .title {
+        color: white !important;
+        font-family: var(--font-sans) !important;
+      }
+      .swagger-ui .info p,
+      .swagger-ui .info li {
+        color: white !important;
+      }
+      .swagger-ui .opblock {
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 10px !important;
+        margin-bottom: 0.75rem !important;
+      }
+      .swagger-ui .opblock-summary {
+        background: transparent !important;
+      }
+      .swagger-ui .opblock-summary-path,
+      .swagger-ui .opblock-summary-description {
+        color: white !important;
+      }
+      .swagger-ui .opblock-body {
+        background: var(--surface2) !important;
+      }
+      .swagger-ui .model-box,
+      .swagger-ui .models {
+        background: var(--surface2) !important;
+      }
+      .swagger-ui .parameters-col_description p,
+      .swagger-ui table thead tr th {
+        color: white !important;
+      }
+      .swagger-ui input,
+      .swagger-ui textarea {
+        background: var(--bg) !important;
+        color: white !important;
+        border-color: var(--border) !important;
+      }
+      .swagger-ui .btn {
+        background: var(--surface2) !important;
+        color: white !important;
+        border-color: var(--border) !important;
+      }
+      .swagger-ui select {
+        background: var(--bg) !important;
+        color: white !important;
+      }
+      .swagger-ui .topbar {
+        display: none !important;
+      }
+      .swagger-ui .scheme-container {
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        padding: 1rem !important;
+        border-radius: 10px !important;
+      }
+
+      /* === FOOTER === */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 2rem;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        font-family: var(--font-mono);
+        position: relative;
+        z-index: 1;
+      }
+      footer span {
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">
+        <div class="logo-area">
+          <div class="logo-badge">EM</div>
+          <div class="logo-text">
+            <h1>Energy Monitoring API</h1>
+            <span>PT Ravelware Technology Indonesia</span>
+          </div>
+        </div>
+        <span class="version-badge">v1.0.0</span>
+      </div>
+    </header>
+
+    <nav id="main-nav">
+      <ul>
+        <li><a href="#overview" class="active">Overview</a></li>
+        <li><a href="#architecture">Arsitektur</a></li>
+        <li><a href="#erd">ERD</a></li>
+        <li><a href="#endpoints">Endpoints</a></li>
+        <li><a href="#swagger">Swagger UI</a></li>
+      </ul>
+    </nav>
+
+    <!-- ═══════════════════════════════ OVERVIEW ═══════════════════════════════ -->
+    <main>
+      <section class="section" id="overview">
+        <div class="section-header">
+          <span class="section-number">01</span>
+          <div>
+            <div class="section-title">Project Overview</div>
+            <div class="section-subtitle">
+              Energy monitoring backend untuk panel listrik gedung Ravelware
+            </div>
+          </div>
+        </div>
+
+        <div class="overview-grid">
+          <div class="overview-card">
+            <div class="label">Base URL</div>
+            <div
+              class="value"
+              style="font-size: 0.95rem; font-family: var(--font-mono)"
+            >
+              localhost:3000
+            </div>
+            <div class="sub">PORT_APP env variable</div>
+          </div>
+          <div class="overview-card">
+            <div class="label">Total Endpoint</div>
+            <div class="value">1</div>
+            <div class="sub">GET /api/dashboard/panel/:panelId</div>
+          </div>
+          <div class="overview-card">
+            <div class="label">Database</div>
+            <div class="value" style="font-size: 1rem">InfluxDB</div>
+            <div class="sub">Time-series data, MQTT ingestion</div>
+          </div>
+          <div class="overview-card">
+            <div class="label">Panel Listrik</div>
+            <div class="value">3</div>
+            <div class="sub">Lantai 1, Lantai 2, Lantai 3</div>
+          </div>
+          <div class="overview-card">
+            <div class="label">Tarif Listrik</div>
+            <div class="value" style="font-size: 1rem">Rp 1.500</div>
+            <div class="sub">Per kWh</div>
+          </div>
+          <div class="overview-card">
+            <div class="label">MQTT Interval</div>
+            <div class="value">±1 min</div>
+            <div class="sub">broker.hivemq.com</div>
+          </div>
+        </div>
+
+        <div class="sub-title" style="margin-bottom: 1rem">Panel IDs Valid</div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap">
+          <span
+            style="
+              font-family: var(--font-mono);
+              font-size: 0.8rem;
+              background: rgba(0, 212, 255, 0.08);
+              border: 1px solid rgba(0, 212, 255, 0.3);
+              color: var(--accent);
+              padding: 0.4rem 1rem;
+              border-radius: 8px;
+            "
+            >PANEL_LANTAI_1</span
+          >
+          <span
+            style="
+              font-family: var(--font-mono);
+              font-size: 0.8rem;
+              background: rgba(0, 212, 255, 0.08);
+              border: 1px solid rgba(0, 212, 255, 0.3);
+              color: var(--accent);
+              padding: 0.4rem 1rem;
+              border-radius: 8px;
+            "
+            >PANEL_LANTAI_2</span
+          >
+          <span
+            style="
+              font-family: var(--font-mono);
+              font-size: 0.8rem;
+              background: rgba(0, 212, 255, 0.08);
+              border: 1px solid rgba(0, 212, 255, 0.3);
+              color: var(--accent);
+              padding: 0.4rem 1rem;
+              border-radius: 8px;
+            "
+            >PANEL_LANTAI_3</span
+          >
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════ ARCHITECTURE ═══════════════════════════════ -->
+      <section class="section" id="architecture">
+        <div class="section-header">
+          <span class="section-number">02</span>
+          <div>
+            <div class="section-title">System Architecture</div>
+            <div class="section-subtitle">
+              Alur data dari sensor hingga REST API response
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-container">
+          <div class="arch-diagram">
+            <!-- Layer 1: Sensor -->
+            <div class="arch-layer" style="padding-bottom: 0">
+              <div class="arch-row-label">SENSOR</div>
+              <div class="arch-nodes-group">
+                <div class="arch-node tertiary">
+                  <div class="node-icon">⚡</div>
+                  <div class="node-title">simulate.sensor.js</div>
+                  <div class="node-sub">MQTT Publisher</div>
+                  <div
+                    class="node-sub"
+                    style="margin-top: 0.3rem; color: #ff6b35"
+                  >
+                    setInterval 60s
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Arrow + label -->
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+                padding: 0.5rem 0;
+              "
+            >
+              <span class="arch-label"
+                >MQTT Publish · topic: DATA/PM/deni/{PANEL}</span
+              >
+              <div
+                style="
+                  width: 2px;
+                  height: 24px;
+                  background: linear-gradient(
+                    180deg,
+                    var(--accent3),
+                    var(--accent)
+                  );
+                  margin: 0 auto;
+                "
+              ></div>
+            </div>
+
+            <!-- Layer 2: MQTT Broker -->
+            <div class="arch-layer" style="padding: 0">
+              <div class="arch-row-label">BROKER</div>
+              <div class="arch-nodes-group">
+                <div class="arch-node primary">
+                  <div class="node-icon">☁️</div>
+                  <div class="node-title">HiveMQ</div>
+                  <div class="node-sub">broker.hivemq.com</div>
+                  <div
+                    class="node-sub"
+                    style="margin-top: 0.3rem; color: var(--accent)"
+                  >
+                    Public MQTT Broker
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+                padding: 0.5rem 0;
+              "
+            >
+              <span class="arch-label">MQTT Subscribe · DATA/PM/deni/#</span>
+              <div
+                style="
+                  width: 2px;
+                  height: 24px;
+                  background: linear-gradient(
+                    180deg,
+                    var(--accent),
+                    var(--accent2)
+                  );
+                  margin: 0 auto;
+                "
+              ></div>
+            </div>
+
+            <!-- Layer 3: Subscriber + Write -->
+            <div class="arch-layer" style="padding: 0">
+              <div class="arch-row-label">INGESTION</div>
+              <div class="arch-nodes-group">
+                <div class="arch-node secondary">
+                  <div class="node-icon">📥</div>
+                  <div class="node-title">simulate.subs.js</div>
+                  <div class="node-sub">MQTT Subscriber</div>
+                  <div
+                    class="node-sub"
+                    style="margin-top: 0.3rem; color: var(--accent2)"
+                  >
+                    Parse + Write InfluxDB
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+                padding: 0.5rem 0;
+              "
+            >
+              <span class="arch-label"
+                >writePoint() · Measurement: power_consumption</span
+              >
+              <div
+                style="
+                  width: 2px;
+                  height: 24px;
+                  background: linear-gradient(
+                    180deg,
+                    var(--accent2),
+                    var(--accent)
+                  );
+                  margin: 0 auto;
+                "
+              ></div>
+            </div>
+
+            <!-- Layer 4: InfluxDB -->
+            <div class="arch-layer" style="padding: 0">
+              <div class="arch-row-label">DATABASE</div>
+              <div class="arch-nodes-group">
+                <div class="arch-node primary">
+                  <div class="node-icon">🗄️</div>
+                  <div class="node-title">InfluxDB</div>
+                  <div class="node-sub">Time-series Database</div>
+                  <div
+                    class="node-sub"
+                    style="margin-top: 0.3rem; color: var(--accent)"
+                  >
+                    Bucket: power_data
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+                padding: 0.5rem 0;
+              "
+            >
+              <span class="arch-label">Flux Query · collectRows()</span>
+              <div
+                style="
+                  width: 2px;
+                  height: 24px;
+                  background: linear-gradient(180deg, var(--accent), #7c3aed);
+                  margin: 0 auto;
+                "
+              ></div>
+            </div>
+
+            <!-- Layer 5: App -->
+            <div class="arch-layer" style="padding: 0">
+              <div class="arch-row-label">APP</div>
+              <div class="arch-nodes-group">
+                <div class="arch-node" style="border-color: #7c3aed55">
+                  <div class="node-icon">🔷</div>
+                  <div class="node-title">service.js</div>
+                  <div class="node-sub">Business Logic</div>
+                  <div
+                    class="node-sub"
+                    style="margin-top: 0.3rem; color: #a78bfa"
+                  >
+                    energy · cost · status
+                  </div>
+                </div>
+                <div
+                  style="
+                    width: 2px;
+                    height: 2rem;
+                    background: var(--border);
+                    transform: rotate(90deg);
+                  "
+                ></div>
+                <div class="arch-node" style="border-color: #7c3aed55">
+                  <div class="node-icon">🔹</div>
+                  <div class="node-title">controller.js</div>
+                  <div class="node-sub">Validation Layer</div>
+                  <div
+                    class="node-sub"
+                    style="margin-top: 0.3rem; color: #a78bfa"
+                  >
+                    month · year · panelId
+                  </div>
+                </div>
+                <div
+                  style="
+                    width: 2px;
+                    height: 2rem;
+                    background: var(--border);
+                    transform: rotate(90deg);
+                  "
+                ></div>
+                <div class="arch-node" style="border-color: #7c3aed55">
+                  <div class="node-icon">🚀</div>
+                  <div class="node-title">Express.js</div>
+                  <div class="node-sub">app.js · router.js</div>
+                  <div
+                    class="node-sub"
+                    style="margin-top: 0.3rem; color: #a78bfa"
+                  >
+                    REST API Server
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+                padding: 0.5rem 0;
+              "
+            >
+              <span class="arch-label">HTTP GET · JSON Response</span>
+              <div
+                style="
+                  width: 2px;
+                  height: 24px;
+                  background: linear-gradient(180deg, #7c3aed, var(--accent3));
+                  margin: 0 auto;
+                "
+              ></div>
+            </div>
+
+            <!-- Layer 6: Client -->
+            <div class="arch-layer" style="padding-top: 0">
+              <div class="arch-row-label">CLIENT</div>
+              <div class="arch-nodes-group">
+                <div class="arch-node tertiary">
+                  <div class="node-icon">🖥️</div>
+                  <div class="node-title">Web Dashboard</div>
+                  <div class="node-sub">Energy Monitoring UI</div>
+                  <div
+                    class="node-sub"
+                    style="margin-top: 0.3rem; color: #ff6b35"
+                  >
+                    dibuat oleh tim Ravelware
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Flow Table -->
+        <div style="margin-top: 2rem">
+          <div class="sub-title" style="margin-bottom: 1rem">
+            MQTT Topic & Data Fields
+          </div>
+          <div style="overflow-x: auto">
+            <table class="param-table">
+              <thead>
+                <tr>
+                  <th>Panel</th>
+                  <th>MQTT Topic</th>
+                  <th>Fields Disimpan</th>
+                  <th>Tag InfluxDB</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="param-name">PANEL_LANTAI_1</span></td>
+                  <td>
+                    <code
+                      style="
+                        font-family: var(--font-mono);
+                        font-size: 0.75rem;
+                        color: var(--text-muted);
+                      "
+                      >DATA/PM/deni/PANEL_LANTAI_1</code
+                    >
+                  </td>
+                  <td>kw, kwh, ampere, voltage</td>
+                  <td><span class="param-type">pmCode=PANEL_LANTAI_1</span></td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">PANEL_LANTAI_2</span></td>
+                  <td>
+                    <code
+                      style="
+                        font-family: var(--font-mono);
+                        font-size: 0.75rem;
+                        color: var(--text-muted);
+                      "
+                      >DATA/PM/deni/PANEL_LANTAI_2</code
+                    >
+                  </td>
+                  <td>kw, kwh, ampere, voltage</td>
+                  <td><span class="param-type">pmCode=PANEL_LANTAI_2</span></td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">PANEL_LANTAI_3</span></td>
+                  <td>
+                    <code
+                      style="
+                        font-family: var(--font-mono);
+                        font-size: 0.75rem;
+                        color: var(--text-muted);
+                      "
+                      >DATA/PM/deni/PANEL_LANTAI_3</code
+                    >
+                  </td>
+                  <td>kw, kwh, ampere, voltage</td>
+                  <td><span class="param-type">pmCode=PANEL_LANTAI_3</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════ ERD ═══════════════════════════════ -->
+      <section class="section" id="erd">
+        <div class="section-header">
+          <span class="section-number">03</span>
+          <div>
+            <div class="section-title">Entity Relationship Diagram</div>
+            <div class="section-subtitle">
+              Struktur data di InfluxDB (time-series model)
+            </div>
+          </div>
+        </div>
+
+        <div class="erd-container">
+          <div class="mermaid">
+            erDiagram PANEL { string pmCode PK string floor string location
+            string status } POWER_READING { timestamp time PK string pmCode FK
+            float kw float kwh float ampere float voltage } DAILY_SUMMARY { date
+            date PK string pmCode FK float energy_usage int cost }
+            MONTHLY_SUMMARY { string yearMonth PK string pmCode FK float
+            total_energy int total_cost } PANEL ||--o{ POWER_READING : "has
+            many" POWER_READING }o--|| DAILY_SUMMARY : "aggregated into"
+            DAILY_SUMMARY }o--|| MONTHLY_SUMMARY : "rolled up into"
+          </div>
+        </div>
+
+        <div
+          style="
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+          "
+        >
+          <div class="endpoint-block">
+            <div
+              style="padding: 1.25rem; border-bottom: 1px solid var(--border)"
+            >
+              <div class="sub-title" style="color: var(--accent)">
+                MEASUREMENT: power_consumption
+              </div>
+            </div>
+            <div style="padding: 1.25rem">
+              <table class="param-table">
+                <thead>
+                  <tr>
+                    <th>Field/Tag</th>
+                    <th>Tipe</th>
+                    <th>Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="param-name">pmCode</span></td>
+                    <td><span class="param-req">TAG</span></td>
+                    <td>Identifier panel (dipakai untuk filter)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">kw</span></td>
+                    <td><span class="param-type">float</span></td>
+                    <td>Power dalam kilowatt</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">kwh</span></td>
+                    <td><span class="param-type">float</span></td>
+                    <td>Akumulasi energi dalam kWh</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">ampere</span></td>
+                    <td><span class="param-type">float</span></td>
+                    <td>Arus listrik (i.pop() dari array)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">voltage</span></td>
+                    <td><span class="param-type">float</span></td>
+                    <td>Tegangan (v.pop() dari array)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">_time</span></td>
+                    <td><span class="param-req">AUTO</span></td>
+                    <td>Timestamp disimpan otomatis InfluxDB</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="endpoint-block">
+            <div
+              style="padding: 1.25rem; border-bottom: 1px solid var(--border)"
+            >
+              <div class="sub-title" style="color: var(--accent2)">
+                LOGIKA KALKULASI
+              </div>
+            </div>
+            <div style="padding: 1.25rem">
+              <table class="param-table">
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>Formula</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="param-name">statusPanel</span></td>
+                    <td>OFFLINE jika lastUpdate &gt; 5 menit lalu</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">today usage</span></td>
+                    <td>kwh_latest − kwh_first (00:00 hari ini)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">cost (default)</span></td>
+                    <td>today_usage × 1.500</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">daily energy</span></td>
+                    <td>kwh_last_hari − kwh_first_hari</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">monthly energy</span></td>
+                    <td>Σ daily_energy semua hari</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">cost (monthly)</span></td>
+                    <td>monthly_energy × 1.500</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════ ENDPOINTS ═══════════════════════════════ -->
+      <section class="section" id="endpoints">
+        <div class="section-header">
+          <span class="section-number">04</span>
+          <div>
+            <div class="section-title">API Endpoints</div>
+            <div class="section-subtitle">
+              Dokumentasi detail per endpoint beserta contoh request & response
+            </div>
+          </div>
+        </div>
+
+        <!-- Endpoint 1 -->
+        <div class="endpoint-block">
+          <div class="endpoint-header">
+            <span class="method-badge method-get">GET</span>
+            <span class="endpoint-path"
+              >/api/dashboard/panel/<span style="color: var(--accent2)"
+                >:panelId</span
+              ></span
+            >
+            <span class="endpoint-desc"
+              >Ambil data dashboard panel listrik</span
+            >
+          </div>
+          <div class="endpoint-body">
+            <!-- LEFT: Parameters -->
+            <div>
+              <div class="sub-title">PATH PARAMETER</div>
+              <table class="param-table" style="margin-bottom: 1.5rem">
+                <thead>
+                  <tr>
+                    <th>Nama</th>
+                    <th>Tipe</th>
+                    <th>Wajib</th>
+                    <th>Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="param-name">panelId</span></td>
+                    <td><span class="param-type">string</span></td>
+                    <td><span class="param-req">Required</span></td>
+                    <td>
+                      ID panel: PANEL_LANTAI_1, PANEL_LANTAI_2, atau
+                      PANEL_LANTAI_3
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="sub-title">QUERY PARAMETERS</div>
+              <table class="param-table" style="margin-bottom: 1.5rem">
+                <thead>
+                  <tr>
+                    <th>Nama</th>
+                    <th>Tipe</th>
+                    <th>Wajib</th>
+                    <th>Format</th>
+                    <th>Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="param-name">month</span></td>
+                    <td><span class="param-type">string</span></td>
+                    <td><span class="param-opt">Optional*</span></td>
+                    <td>
+                      <span
+                        style="
+                          font-family: var(--font-mono);
+                          font-size: 0.72rem;
+                          color: var(--text-muted);
+                        "
+                        >jan|feb|mar...<br />atau 1–12</span
+                      >
+                    </td>
+                    <td>Bulan yang diminta. Wajib jika year diisi.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="param-name">year</span></td>
+                    <td><span class="param-type">string</span></td>
+                    <td><span class="param-opt">Optional*</span></td>
+                    <td>
+                      <span
+                        style="
+                          font-family: var(--font-mono);
+                          font-size: 0.72rem;
+                          color: var(--text-muted);
+                        "
+                        >4 digit YYYY</span
+                      >
+                    </td>
+                    <td>Tahun yang diminta. Wajib jika month diisi.</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="sub-title" style="margin-bottom: 0.75rem">
+                BEHAVIOR BERDASARKAN PARAMETER
+              </div>
+              <div
+                style="
+                  font-size: 0.82rem;
+                  line-height: 1.8;
+                  color: var(--text-muted);
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    gap: 0.75rem;
+                    margin-bottom: 0.5rem;
+                    align-items: flex-start;
+                  "
+                >
+                  <span
+                    style="
+                      color: var(--accent2);
+                      font-family: var(--font-mono);
+                      font-size: 0.7rem;
+                      min-width: 90px;
+                    "
+                    >Tanpa param</span
+                  >
+                  <span
+                    >→ Kembalikan data hari ini (today's usage), energy = 0,
+                    cost = today usage × 1.500</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    gap: 0.75rem;
+                    margin-bottom: 0.5rem;
+                    align-items: flex-start;
+                  "
+                >
+                  <span
+                    style="
+                      color: var(--accent);
+                      font-family: var(--font-mono);
+                      font-size: 0.7rem;
+                      min-width: 90px;
+                    "
+                    >?month&year</span
+                  >
+                  <span
+                    >→ Kembalikan energy & cost bulanan. Energy = Σ daily usage,
+                    cost = energy × 1.500</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    gap: 0.75rem;
+                    margin-bottom: 0.5rem;
+                    align-items: flex-start;
+                  "
+                >
+                  <span
+                    style="
+                      color: var(--accent3);
+                      font-family: var(--font-mono);
+                      font-size: 0.7rem;
+                      min-width: 90px;
+                    "
+                    >Salah satu</span
+                  >
+                  <span>→ Error 400: parameter tidak lengkap</span>
+                </div>
+                <div
+                  style="display: flex; gap: 0.75rem; align-items: flex-start"
+                >
+                  <span
+                    style="
+                      color: #f87171;
+                      font-family: var(--font-mono);
+                      font-size: 0.7rem;
+                      min-width: 90px;
+                    "
+                    >Format salah</span
+                  >
+                  <span>→ Error 400: format month/year tidak valid</span>
+                </div>
+              </div>
+
+              <div style="margin-top: 1.5rem">
+                <div class="sub-title" style="margin-bottom: 0.75rem">
+                  CONTOH REQUEST
+                </div>
+                <div class="code-block" style="font-size: 0.72rem">
+                  <span style="color: var(--text-muted)"
+                    ># Default — data hari ini</span
+                  >
+                  GET /api/dashboard/panel/PANEL_LANTAI_1
+
+                  <span style="color: var(--text-muted)"
+                    ># Filter bulan Februari 2026</span
+                  >
+                  GET /api/dashboard/panel/PANEL_LANTAI_1?month=feb&year=2026
+
+                  <span style="color: var(--text-muted)"
+                    ># Filter dengan angka bulan</span
+                  >
+                  GET /api/dashboard/panel/PANEL_LANTAI_2?month=2&year=2026
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: Responses -->
+            <div>
+              <div class="sub-title" style="margin-bottom: 0.75rem">
+                RESPONSES
+              </div>
+
+              <!-- 200 OK - Default -->
+              <div style="margin-bottom: 1.5rem">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    margin-bottom: 0.75rem;
+                  "
+                >
+                  <span
+                    style="
+                      background: rgba(0, 255, 153, 0.1);
+                      color: var(--accent2);
+                      border: 1px solid rgba(0, 255, 153, 0.4);
+                      font-family: var(--font-mono);
+                      font-size: 0.7rem;
+                      font-weight: 700;
+                      padding: 0.2rem 0.6rem;
+                      border-radius: 4px;
+                    "
+                    >200 OK</span
+                  >
+                  <span style="font-size: 0.78rem; color: var(--text-muted)"
+                    >Default (tanpa query param)</span
+                  >
+                </div>
+                <div class="code-block">
+                  { <span class="json-key">"status"</span>:
+                  <span class="json-str">"OK"</span>,
+                  <span class="json-key">"message"</span>:
+                  <span class="json-str">"Success fetch data"</span>,
+                  <span class="json-key">"data"</span>: {
+                  <span class="json-key">"pmCode"</span>:
+                  <span class="json-str">"PANEL_LANTAI_1"</span>,
+                  <span class="json-key">"year"</span>:
+                  <span class="json-num">2026</span>,
+                  <span class="json-key">"month"</span>:
+                  <span class="json-num">2</span>,
+                  <span class="json-key">"date"</span>: {
+                  <span class="json-key">"last_update"</span>:
+                  <span class="json-str">"2026-02-20T10:30:00Z"</span>,
+                  <span class="json-key">"formatted"</span>:
+                  <span class="json-str">"20/2/2026, 17.30.00"</span>
+                  },
+                  <span class="json-key">"statusPanel"</span>:
+                  <span class="json-str">"ONLINE"</span>,
+                  <span class="json-key">"energy"</span>:
+                  <span class="json-num">0</span>,
+                  <span style="color: var(--text-muted)"
+                    >// selalu 0 jika tanpa ?month</span
+                  >
+                  <span class="json-key">"cost"</span>:
+                  <span class="json-num">48150</span>,
+                  <span style="color: var(--text-muted)"
+                    >// today usage × 1500</span
+                  >
+                  <span class="json-key">"details"</span>: [ {
+                  <span class="json-key">"time"</span>:
+                  <span class="json-str">"2026-02-20T00:00:05Z"</span>,
+                  <span class="json-key">"kw"</span>:
+                  <span class="json-num">1.2</span>,
+                  <span class="json-key">"ampere"</span>:
+                  <span class="json-num">0.7</span>,
+                  <span class="json-key">"voltage"</span>:
+                  <span class="json-num">149.8</span>,
+                  <span class="json-key">"kwh"</span>:
+                  <span class="json-num">100.0</span>
+                  }, {
+                  <span class="json-key">"time"</span>:
+                  <span class="json-str">"2026-02-20T10:30:00Z"</span>,
+                  <span class="json-key">"kw"</span>:
+                  <span class="json-num">3.4</span>,
+                  <span class="json-key">"ampere"</span>:
+                  <span class="json-num">0.7</span>,
+                  <span class="json-key">"voltage"</span>:
+                  <span class="json-num">149.8</span>,
+                  <span class="json-key">"kwh"</span>:
+                  <span class="json-num">132.1</span> } ] } }
+                </div>
+              </div>
+
+              <!-- 200 OK - Monthly -->
+              <div style="margin-bottom: 1.5rem">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    margin-bottom: 0.75rem;
+                  "
+                >
+                  <span
+                    style="
+                      background: rgba(0, 255, 153, 0.1);
+                      color: var(--accent2);
+                      border: 1px solid rgba(0, 255, 153, 0.4);
+                      font-family: var(--font-mono);
+                      font-size: 0.7rem;
+                      font-weight: 700;
+                      padding: 0.2rem 0.6rem;
+                      border-radius: 4px;
+                    "
+                    >200 OK</span
+                  >
+                  <span style="font-size: 0.78rem; color: var(--text-muted)"
+                    >Dengan ?month=feb&year=2026</span
+                  >
+                </div>
+                <div class="code-block">
+                  { <span class="json-key">"status"</span>:
+                  <span class="json-str">"OK"</span>,
+                  <span class="json-key">"message"</span>:
+                  <span class="json-str">"Success fetch data"</span>,
+                  <span class="json-key">"data"</span>: {
+                  <span class="json-key">"pmCode"</span>:
+                  <span class="json-str">"PANEL_LANTAI_1"</span>,
+                  <span class="json-key">"year"</span>:
+                  <span class="json-num">2026</span>,
+                  <span class="json-key">"month"</span>:
+                  <span class="json-num">2</span>,
+                  <span class="json-key">"date"</span>: {
+                  <span class="json-key">"last_update"</span>:
+                  <span class="json-str">"2026-02-20T10:30:00Z"</span>,
+                  <span class="json-key">"formatted"</span>:
+                  <span class="json-str">"20/2/2026, 17.30.00"</span>
+                  },
+                  <span class="json-key">"statusPanel"</span>:
+                  <span class="json-str">"ONLINE"</span>,
+                  <span class="json-key">"energy"</span>:
+                  <span class="json-num">21.74</span>,
+                  <span style="color: var(--text-muted)"
+                    >// Σ daily usage Feb</span
+                  >
+                  <span class="json-key">"cost"</span>:
+                  <span class="json-num">32610</span>,
+                  <span style="color: var(--text-muted)">// 21.74 × 1500</span>
+                  <span class="json-key">"details"</span>: [
+                  <span style="color: var(--text-muted)"
+                    >/* semua data point Feb */</span
+                  >
+                  ] } }
+                </div>
+              </div>
+
+              <!-- Error responses -->
+              <div style="margin-bottom: 0.75rem">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    margin-bottom: 0.75rem;
+                  "
+                >
+                  <span
+                    style="
+                      background: rgba(255, 107, 53, 0.1);
+                      color: var(--accent3);
+                      border: 1px solid rgba(255, 107, 53, 0.4);
+                      font-family: var(--font-mono);
+                      font-size: 0.7rem;
+                      font-weight: 700;
+                      padding: 0.2rem 0.6rem;
+                      border-radius: 4px;
+                    "
+                    >400 Bad Request</span
+                  >
+                </div>
+                <div class="code-block" style="font-size: 0.72rem">
+                  <span style="color: var(--text-muted)"
+                    >// Month typo: ?month=fe&year=2026</span
+                  >
+                  {
+                  <span class="json-key">"status"</span>:
+                  <span class="json-str">"ERROR"</span>,
+                  <span class="json-key">"message"</span>:
+                  <span class="json-str"
+                    >"Format 'month' tidak valid: \"fe\". Gunakan format
+                    seperti: jan, feb, mar, ... atau angka 1-12."</span
+                  >
+                  }
+
+                  <span style="color: var(--text-muted)"
+                    >// Year tidak diisi: ?month=feb</span
+                  >
+                  {
+                  <span class="json-key">"status"</span>:
+                  <span class="json-str">"ERROR"</span>,
+                  <span class="json-key">"message"</span>:
+                  <span class="json-str"
+                    >"Parameter 'year' wajib diisi jika menggunakan filter
+                    bulan."</span
+                  >
+                  }
+
+                  <span style="color: var(--text-muted)"
+                    >// Year format salah: ?month=feb&year=26</span
+                  >
+                  {
+                  <span class="json-key">"status"</span>:
+                  <span class="json-str">"ERROR"</span>,
+                  <span class="json-key">"message"</span>:
+                  <span class="json-str"
+                    >"Format 'year' tidak valid: \"26\". Gunakan format 4 digit,
+                    contoh: 2026."</span
+                  >
+                  }
+                </div>
+              </div>
+
+              <div style="margin-bottom: 0.75rem; margin-top: 1rem">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    margin-bottom: 0.75rem;
+                  "
+                >
+                  <span
+                    style="
+                      background: rgba(251, 191, 36, 0.1);
+                      color: #fbbf24;
+                      border: 1px solid rgba(251, 191, 36, 0.4);
+                      font-family: var(--font-mono);
+                      font-size: 0.7rem;
+                      font-weight: 700;
+                      padding: 0.2rem 0.6rem;
+                      border-radius: 4px;
+                    "
+                    >404 Not Found</span
+                  >
+                </div>
+                <div class="code-block" style="font-size: 0.72rem">
+                  <span style="color: var(--text-muted)"
+                    >// Tidak ada data di DB untuk panel & periode</span
+                  >
+                  {
+                  <span class="json-key">"status"</span>:
+                  <span class="json-str">"ERROR"</span>,
+                  <span class="json-key">"message"</span>:
+                  <span class="json-str"
+                    >"Data tidak ditemukan untuk panel 'PANEL_LANTAI_1' pada feb
+                    2026."</span
+                  >
+                  }
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    margin-bottom: 0.75rem;
+                  "
+                >
+                  <span
+                    style="
+                      background: rgba(248, 113, 113, 0.1);
+                      color: #f87171;
+                      border: 1px solid rgba(248, 113, 113, 0.4);
+                      font-family: var(--font-mono);
+                      font-size: 0.7rem;
+                      font-weight: 700;
+                      padding: 0.2rem 0.6rem;
+                      border-radius: 4px;
+                    "
+                    >500 Server Error</span
+                  >
+                </div>
+                <div class="code-block" style="font-size: 0.72rem">
+                  { <span class="json-key">"status"</span>:
+                  <span class="json-str">"ERROR"</span>,
+                  <span class="json-key">"message"</span>:
+                  <span class="json-str"
+                    >"&lt;error.message dari exception&gt;"</span
+                  >
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Validation Matrix -->
+        <div style="margin-top: 1.5rem">
+          <div class="sub-title" style="margin-bottom: 1rem">
+            VALIDATION MATRIX
+          </div>
+          <div style="overflow-x: auto">
+            <table class="param-table">
+              <thead>
+                <tr>
+                  <th>month</th>
+                  <th>year</th>
+                  <th>HTTP Status</th>
+                  <th>Pesan / Perilaku</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span style="color: var(--text-muted)">—</span></td>
+                  <td><span style="color: var(--text-muted)">—</span></td>
+                  <td><span class="param-type">200</span></td>
+                  <td>Default: data hari ini, energy=0</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">feb</span></td>
+                  <td><span class="param-name">2026</span></td>
+                  <td><span class="param-type">200</span></td>
+                  <td>Data Februari 2026, energy dihitung bulanan</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">2</span></td>
+                  <td><span class="param-name">2026</span></td>
+                  <td><span class="param-type">200</span></td>
+                  <td>Sama dengan above (angka dikonversi)</td>
+                </tr>
+                <tr>
+                  <td><span class="param-req">fe</span></td>
+                  <td><span class="param-name">2026</span></td>
+                  <td><span class="param-req">400</span></td>
+                  <td>Format month tidak valid (typo, &lt;3 karakter valid)</td>
+                </tr>
+                <tr>
+                  <td><span class="param-req">13</span></td>
+                  <td><span class="param-name">2026</span></td>
+                  <td><span class="param-req">400</span></td>
+                  <td>Format month tidak valid (di luar 1–12)</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">feb</span></td>
+                  <td><span style="color: var(--text-muted)">—</span></td>
+                  <td><span class="param-req">400</span></td>
+                  <td>year wajib diisi jika month ada</td>
+                </tr>
+                <tr>
+                  <td><span style="color: var(--text-muted)">—</span></td>
+                  <td><span class="param-name">2026</span></td>
+                  <td><span class="param-req">400</span></td>
+                  <td>month wajib diisi jika year ada</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">feb</span></td>
+                  <td><span class="param-req">26</span></td>
+                  <td><span class="param-req">400</span></td>
+                  <td>Format year tidak valid (bukan 4 digit)</td>
+                </tr>
+                <tr>
+                  <td><span class="param-name">feb</span></td>
+                  <td><span class="param-req">abcd</span></td>
+                  <td><span class="param-req">400</span></td>
+                  <td>Format year tidak valid (bukan angka)</td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <span style="color: var(--text-muted)"
+                      >Data tidak ada di InfluxDB</span
+                    >
+                  </td>
+                  <td>
+                    <span
+                      style="
+                        color: #fbbf24;
+                        font-family: var(--font-mono);
+                        font-size: 0.75rem;
+                      "
+                      >404</span
+                    >
+                  </td>
+                  <td>Data tidak ditemukan untuk panel/periode</td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <span style="color: var(--text-muted)"
+                      >InfluxDB connection error</span
+                    >
+                  </td>
+                  <td>
+                    <span
+                      style="
+                        color: #f87171;
+                        font-family: var(--font-mono);
+                        font-size: 0.75rem;
+                      "
+                      >500</span
+                    >
+                  </td>
+                  <td>Internal server error</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════ SWAGGER UI ═══════════════════════════════ -->
+      <section class="section" id="swagger">
+        <div class="section-header">
+          <span class="section-number">05</span>
+          <div>
+            <div class="section-title">Swagger UI</div>
+            <div class="section-subtitle">
+              Interactive OpenAPI documentation — coba endpoint langsung dari
+              sini
+            </div>
+          </div>
+        </div>
+        <div id="swagger-ui"></div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Energy Monitoring API</span> · PT Ravelware Technology Indonesia ·
+      v1.0.0<br />
+      <span
+        style="
+          color: var(--text-muted);
+          font-size: 0.7rem;
+          margin-top: 0.5rem;
+          display: block;
+        "
+        >Backend Developer Intern Challenge · 2026</span
+      >
+    </footer>
+
+    <script>
+      // ── Mermaid config ──────────────────────────────────────────────
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "dark",
+        themeVariables: {
+          primaryColor: "#1a2235",
+          primaryTextColor: "#e2e8f0",
+          primaryBorderColor: "#1e2d45",
+          lineColor: "#00d4ff",
+          secondaryColor: "#111827",
+          tertiaryColor: "#0a0e17",
+          edgeLabelBackground: "#111827",
+          attributeBackgroundColorEven: "#111827",
+          attributeBackgroundColorOdd: "#1a2235",
+        },
+        er: { diagramPadding: 30, useMaxWidth: true },
+      });
+
+      // ── OpenAPI Spec ────────────────────────────────────────────────
+      const openApiSpec = {
+        openapi: "3.0.0",
+        info: {
+          title: "Energy Monitoring API",
+          version: "1.0.0",
+          description: `REST API untuk monitoring energi listrik gedung PT Ravelware Technology Indonesia.\n\n**Panel tersedia:** PANEL_LANTAI_1, PANEL_LANTAI_2, PANEL_LANTAI_3\n\n**Tarif:** Rp 1.500/kWh\n\n**Status offline:** jika data terakhir > 5 menit lalu`,
+          contact: { name: "Ravelware Tech", email: "contact@ravelware.co" },
+        },
+        servers: [
+          { url: "http://localhost:3000", description: "Local Development" },
+        ],
+        paths: {
+          "/api/dashboard/panel/{panelId}": {
+            get: {
+              summary: "Get Dashboard Panel Data",
+              description:
+                "Mengambil data energi dan cost panel listrik. Tanpa query param mengembalikan data hari ini (energy=0). Dengan ?month&year mengembalikan data bulanan.",
+              operationId: "getDashboardData",
+              tags: ["Dashboard"],
+              parameters: [
+                {
+                  name: "panelId",
+                  in: "path",
+                  required: true,
+                  description: "ID panel listrik",
+                  schema: {
+                    type: "string",
+                    enum: [
+                      "PANEL_LANTAI_1",
+                      "PANEL_LANTAI_2",
+                      "PANEL_LANTAI_3",
+                    ],
+                    example: "PANEL_LANTAI_1",
+                  },
+                },
+                {
+                  name: "month",
+                  in: "query",
+                  required: false,
+                  description:
+                    "Bulan dalam format Inggris (jan, feb, mar, ...) atau angka (1-12). Wajib diisi jika year disertakan.",
+                  schema: {
+                    type: "string",
+                    example: "feb",
+                  },
+                },
+                {
+                  name: "year",
+                  in: "query",
+                  required: false,
+                  description:
+                    "Tahun dalam format 4 digit (YYYY). Wajib diisi jika month disertakan.",
+                  schema: {
+                    type: "string",
+                    example: "2026",
+                  },
+                },
+              ],
+              responses: {
+                200: {
+                  description: "Data berhasil diambil",
+                  content: {
+                    "application/json": {
+                      schema: {
+                        type: "object",
+                        properties: {
+                          status: { type: "string", example: "OK" },
+                          message: {
+                            type: "string",
+                            example: "Success fetch data",
+                          },
+                          data: {
+                            type: "object",
+                            properties: {
+                              pmCode: {
+                                type: "string",
+                                example: "PANEL_LANTAI_1",
+                              },
+                              year: { type: "integer", example: 2026 },
+                              month: { type: "integer", example: 2 },
+                              date: {
+                                type: "object",
+                                properties: {
+                                  last_update: {
+                                    type: "string",
+                                    format: "date-time",
+                                    example: "2026-02-20T10:30:00Z",
+                                  },
+                                  formatted: {
+                                    type: "string",
+                                    example: "20/2/2026, 17.30.00",
+                                  },
+                                },
+                              },
+                              statusPanel: {
+                                type: "string",
+                                enum: ["ONLINE", "OFFLINE"],
+                                example: "ONLINE",
+                              },
+                              energy: {
+                                type: "number",
+                                description:
+                                  "kWh usage. 0 jika tanpa filter bulan.",
+                                example: 21.74,
+                              },
+                              cost: {
+                                type: "integer",
+                                description:
+                                  "Biaya dalam Rupiah (energy × 1500 atau today_usage × 1500)",
+                                example: 32610,
+                              },
+                              details: {
+                                type: "array",
+                                items: {
+                                  type: "object",
+                                  properties: {
+                                    time: {
+                                      type: "string",
+                                      format: "date-time",
+                                    },
+                                    kw: { type: "number", example: 1.2 },
+                                    ampere: { type: "number", example: 0.7 },
+                                    voltage: { type: "number", example: 149.8 },
+                                    kwh: { type: "number", example: 132.1 },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                400: {
+                  description: "Parameter tidak valid atau tidak lengkap",
+                  content: {
+                    "application/json": {
+                      schema: {
+                        type: "object",
+                        properties: {
+                          status: { type: "string", example: "ERROR" },
+                          message: {
+                            type: "string",
+                            example:
+                              "Format 'month' tidak valid: \"fe\". Gunakan format seperti: jan, feb, mar, ... atau angka 1-12.",
+                          },
+                        },
+                      },
+                      examples: {
+                        monthTypo: {
+                          summary: "Month typo",
+                          value: {
+                            status: "ERROR",
+                            message:
+                              "Format 'month' tidak valid: \"fe\". Gunakan format seperti: jan, feb, mar, ... atau angka 1-12.",
+                          },
+                        },
+                        missingYear: {
+                          summary: "Year tidak diisi",
+                          value: {
+                            status: "ERROR",
+                            message:
+                              "Parameter 'year' wajib diisi jika menggunakan filter bulan.",
+                          },
+                        },
+                        missingMonth: {
+                          summary: "Month tidak diisi",
+                          value: {
+                            status: "ERROR",
+                            message:
+                              "Parameter 'month' wajib diisi jika menggunakan filter tahun.",
+                          },
+                        },
+                        invalidYear: {
+                          summary: "Format year salah",
+                          value: {
+                            status: "ERROR",
+                            message:
+                              "Format 'year' tidak valid: \"26\". Gunakan format 4 digit, contoh: 2026.",
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                404: {
+                  description: "Data tidak ditemukan di database",
+                  content: {
+                    "application/json": {
+                      schema: {
+                        type: "object",
+                        properties: {
+                          status: { type: "string", example: "ERROR" },
+                          message: {
+                            type: "string",
+                            example:
+                              "Data tidak ditemukan untuk panel 'PANEL_LANTAI_1' pada feb 2026.",
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                500: {
+                  description: "Internal server error",
+                  content: {
+                    "application/json": {
+                      schema: {
+                        type: "object",
+                        properties: {
+                          status: { type: "string", example: "ERROR" },
+                          message: {
+                            type: "string",
+                            example: "connect ECONNREFUSED 127.0.0.1:8086",
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        tags: [
+          {
+            name: "Dashboard",
+            description: "Energy monitoring dashboard endpoints",
+          },
+        ],
+      };
+
+      // ── Swagger UI Init ─────────────────────────────────────────────
+      SwaggerUIBundle({
+        spec: openApiSpec,
+        dom_id: "#swagger-ui",
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIBundle.SwaggerUIStandalonePreset,
+        ],
+        layout: "BaseLayout",
+        deepLinking: true,
+        displayRequestDuration: true,
+        tryItOutEnabled: true,
+        defaultModelsExpandDepth: 2,
+      });
+
+      // ── Active nav on scroll ────────────────────────────────────────
+      const sections = document.querySelectorAll("section[id]");
+      const navLinks = document.querySelectorAll("nav a");
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((s) => {
+          if (window.scrollY >= s.offsetTop - 120) current = s.id;
+        });
+        navLinks.forEach((a) => {
+          a.classList.toggle(
+            "active",
+            a.getAttribute("href") === "#" + current,
+          );
+        });
+      });
+    </script>
+  </body>
+</html>

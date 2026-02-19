@@ -1,0 +1,21 @@
+{
+  "name": "backend_intern_ravelware",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env --watch app.js",
+    "sub": "node --env-file-if-exists=.env --watch simulate.subs.js",
+    "pub": "node --env-file-if-exists=.env --watch simulate.sensor.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@influxdata/influxdb-client": "^1.35.0",
+    "express": "^5.2.1",
+    "mqtt": "^5.15.0"
+  }
+}

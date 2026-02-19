@@ -1,0 +1,2 @@
+GET http://localhost:3000/api/dashboard/panel/PANEL_LANTAI_1
+Accept: application/json
