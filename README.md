@@ -98,6 +98,7 @@ Dokumentasi lengkap tersedia di file `docs/index.html`, mencakup:
 - **ERD** — struktur data InfluxDB
 - **API Endpoints** — detail parameter, request, dan semua kemungkinan response
 - **Swagger UI** — coba endpoint langsung dari browser
+- **note** - jika terkena cors origin saat mencoba endpoint dari swagger, install extensi chrome [cors](https://chromewebstore.google.com/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=en-US&utm_source=ext_sidebar), lalu aktifkan
 
 **Cara membuka:**
 ```bash
@@ -162,3 +163,4 @@ curl http://localhost:3000/api/dashboard/panel/PANEL_LANTAI_1?month=feb&year=202
 - **`npm run pub`** (simulasi sensor) dan **`npm run sub`** (subscriber) harus berjalan **bersamaan** agar data mengalir ke InfluxDB
 
 ---
+
